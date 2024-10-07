@@ -1,68 +1,40 @@
 let url = "http://127.0.0.1:5000";
 
-const inputField = document.getElementById('user-input');
-inputField.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        sendMessage();
-    } else if (event.key === 'Enter' && event.shiftKey) {
-        testAPI();
-    }
-});
-
-checkAPIStatus();
-
-fetch(url+"/collections", {
-    method: "GET",
-})
-.then(response => response.json())
-.then(data => {
-    let collections = data["collections"];
-    let collectionsDiv = document.querySelector('.collections');
-    for (let i in collections) {
-        let collection = collections[i];
-        
-        let button = document.createElement('button');
-        button.innerText = collection["name"];
-        button.path = collection["path"];
-        button.classList.add("collection-button");
-        button.onclick = function() {
-            getCollection(button.path);
-        };
-        collectionsDiv.appendChild(button);
-    }
-})
-.catch(error => {
-    console.error("Error fetching collections:", error)
-})
-
-const backButton = document.getElementById('backBtn');
-
-backButton.addEventListener('click', function() {
-    // Hide the container and sections
-    document.getElementById('container').style.display = 'none';
-    
-    // Show the collections again
-    document.getElementById('collections').style.display = 'block';
-    
-    // Optionally clear the content div or sections if needed
-    const sectionsDiv = document.querySelector('.sections');
-    sectionsDiv.innerHTML = ''; // Clear any previous section buttons
-    
-    const contentDiv = document.querySelector('.content');
-    contentDiv.innerHTML = ''; // Clear content
-    backButton.style.display = 'none';
-});
-
 const chatBox = document.getElementById('chat-box');
-showInstructions();
-
-// Show document parser section by default on page load
 window.onload = function() {
-    // showSection('documentParser');
-    showSection('chatbot');
+    showPages('documentParser');
 };
+init()
 
 // Helper Functions
+
+function init() {
+    checkAPIStatus();
+    formatPage();
+    showInstructions();
+
+    const inputField = document.getElementById('user-input');
+    inputField.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        } else if (event.key === 'Enter' && event.shiftKey) {
+            testAPI();
+        }
+    });
+
+    const backButton = document.getElementById('backBtn');
+    backButton.addEventListener('click', function() {
+        document.getElementById('container').style.display = 'none';
+        document.getElementById('collections').style.display = 'block';
+        
+        const sectionsDiv = document.querySelector('.sections');
+        sectionsDiv.innerHTML = '';
+        
+        const contentDiv = document.querySelector('.content');
+        contentDiv.innerHTML = '';
+        backButton.style.display = 'none';
+    });
+}
 
 function testCollection() {
     document.getElementById('collections').style.display = 'none';
@@ -83,75 +55,7 @@ function testCollection() {
     }
 }
 
-async function checkAPIStatus(){
-    let collectionsDiv = document.querySelector('.collections')
-    const statusMessageDiv = document.createElement('div')
-    statusMessageDiv.classList.add('statusMessage')
-    statusMessageDiv.textContent = "Connecting to API..."
-    collectionsDiv.appendChild(statusMessageDiv)
-    try {
-        const response = await fetch(url+"/init");
-        if (response.ok) {
-            statusMessageDiv.textContent = "Connected to API"
-            setTimeout(() => {
-                statusMessageDiv.remove();
-            }, 2000);
-        }
-    } catch (error) {
-        console.error("Error: ", error);
-        // statusMessageDiv.remove();
-        // const errorMessageDiv = document.createElement('div');
-        // errorMessageDiv.classList.add('msg', 'error_message');
-        // errorMessageDiv.textContent = "Error: Couldn't connect to the server.";
-        // collectionsDiv.appendChild(errorMessageDiv);
-    }
-}
-
-function showSection(section) {
-    // Hide all sections
-    document.getElementById('collections').style.display = 'none';
-    document.getElementById('container').style.display = 'none';
-    document.getElementById('chatbot').style.display = 'none';
-
-    // Show the selected section
-    if (section === 'chatbot') {
-        document.getElementById('chatbot').style.display = 'block';
-        document.getElementById('chatbot-option').classList.add('selected') 
-        document.getElementById('doc-parser-option').classList.remove('selected') 
-        document.getElementById('backBtn').style.display = 'none'
-    } else if (section === 'documentParser') {
-        document.getElementById('collections').style.display = 'block';
-        document.getElementById('doc-parser-option').classList.add('selected')
-        document.getElementById('chatbot-option').classList.remove('selected')
-    }
-}
-
-async function getCollection(path) {
-    console.log(path)
-    const loadingOverlay = document.getElementById('loading-overlay');
-    loadingOverlay.style.display = 'flex';
-    fetch(url+"/format", {
-        method:"POST",
-        headers: {
-            'Content-Type': 'application/json'  // Add this line to set content type
-        },
-        body: JSON.stringify({
-            "path": path,
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        loadingOverlay.style.display = 'none';
-        if (data) {
-            document.getElementById('collections').style.display = 'none';
-            document.getElementById('container').style.display = 'flex';
-            console.log(data)
-            loadSections(data['sections'], data['dictionary']);
-        }
-    })
-}
-
-async function loadSections(data, dictionary) {
+function loadSections(data, dictionary) {
     const sectionsDiv = document.querySelector('.sections');
     const contentDiv = document.querySelector('.content');
     const backButton = document.getElementById('backBtn')
@@ -172,7 +76,7 @@ async function loadSections(data, dictionary) {
                 contentDiv.innerHTML = `<h2>${section.title}</h2><p>${markdownContent}</p>`;
                 addTooltipListeners(contentDiv, data, dictionary);
             });
-
+            
             // Append the button to the sections div
             sectionsDiv.appendChild(sectionButton);
         }
@@ -229,6 +133,24 @@ function addTooltipListeners(contentDiv, data, dictionary) {
     })
 }
 
+function showPages(section) {
+    document.getElementById('collections').style.display = 'none';
+    document.getElementById('container').style.display = 'none';
+    document.getElementById('chatbot').style.display = 'none';
+
+    if (section === 'chatbot') {
+        document.getElementById('chatbot').style.display = 'block';
+        document.getElementById('chatbot-option').classList.add('selected');
+        document.getElementById('doc-parser-option').classList.remove('selected');
+        document.getElementById('backBtn').style.display = 'none'
+        showInstructions();
+    } else if (section === 'documentParser') {
+        document.getElementById('collections').style.display = 'block';
+        document.getElementById('doc-parser-option').classList.add('selected');
+        document.getElementById('chatbot-option').classList.remove('selected');
+    }
+}
+
 function showInstructions() {
     if (chatBox.childNodes.length === 0) {
         instructionMsgDiv = document.createElement('div');
@@ -251,6 +173,83 @@ function showInstructions() {
         chatBox.appendChild(instructionMsgDiv);
     }
 }
+
+// API Calls
+
+async function checkAPIStatus(){
+    let collectionsDiv = document.querySelector('.collections')
+    const statusMessageDiv = document.createElement('div')
+    statusMessageDiv.classList.add('statusMessage')
+    statusMessageDiv.textContent = "Connecting to API..."
+    collectionsDiv.appendChild(statusMessageDiv)
+    try {
+        const response = await fetch(url+"/init");
+        if (response.ok) {
+            statusMessageDiv.textContent = "Connected to API"
+            setTimeout(() => {
+                statusMessageDiv.remove();
+            }, 2000);
+        }
+    } catch (error) {
+        setTimeout(() => {
+            statusMessageDiv.remove();
+            console.log("Trying again")
+            init()
+        }, 15000);
+    }
+}
+
+async function formatPage() {
+    await fetch(url+"/collections", {
+        method: "GET",
+    })
+    .then(response => response.json())
+    .then(data => {
+        let collections = data["collections"];
+        let collectionsDiv = document.querySelector('.collections');
+        for (let i in collections) {
+            let collection = collections[i];
+            
+            let button = document.createElement('button');
+            button.innerText = collection["name"];
+            button.path = collection["path"];
+            button.classList.add("collection-button");
+            button.onclick = function() {
+                getCollection(button.path);
+            };
+            collectionsDiv.appendChild(button);
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching collections:", error)
+    })
+}
+
+async function getCollection(path) {
+    console.log(path)
+    const loadingOverlay = document.getElementById('loading-overlay');
+    loadingOverlay.style.display = 'flex';
+    await fetch(url+"/format", {
+        method:"POST",
+        headers: {
+            'Content-Type': 'application/json'  // Add this line to set content type
+        },
+        body: JSON.stringify({
+            "path": path,
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        loadingOverlay.style.display = 'none';
+        if (data) {
+            document.getElementById('collections').style.display = 'none';
+            document.getElementById('container').style.display = 'flex';
+            console.log(data)
+            loadSections(data['sections'], data['dictionary']);
+        }
+    })
+}
+
 
 async function sendMessage() {
     const userInput = document.getElementById('user-input').value;
