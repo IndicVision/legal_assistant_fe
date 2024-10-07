@@ -40,7 +40,7 @@ body {
     position:absolute;
     z-index: 10000;
     height: 30px;
-    top: 5px;
+    top: 15px;
     left: 10px;
     border-radius: 100px;
 }
