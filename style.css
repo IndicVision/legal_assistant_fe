@@ -12,7 +12,7 @@ body {
 
 .menu-bar {
     background-color: #0f0e0e;
-    padding: 10px;
+    padding: 20px;
     text-align: center;
     width: 100%; /* Make menu bar full width */
     position: fixed; /* Fix it to the top */
