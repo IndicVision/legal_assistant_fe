@@ -30,9 +30,19 @@ body {
     margin: 10px;
     border-radius: 5px;
 }
+
 .menu-bar a.selected {
     background-color: #2998d8;
     color: white;
+}
+
+#logo {
+    position:absolute;
+    z-index: 10000;
+    height: 30px;
+    top: 5px;
+    left: 10px;
+    border-radius: 100px;
 }
 
 .collections {
