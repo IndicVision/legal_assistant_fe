@@ -215,7 +215,7 @@ async function formatPage() {
             button.path = collection["path"];
             button.classList.add("collection-button");
             button.onclick = function() {
-                getCollection(button.path, content["name"]);
+                getCollection(button.path, collection["name"]);
             };
             collectionsDiv.appendChild(button);
         }
