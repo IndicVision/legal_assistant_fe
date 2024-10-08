@@ -169,7 +169,7 @@ function showInstructions() {
             <p style="text-indent: 7%">These legal acts were not chosen in any predetermined order but rather randomly (except the <i>Trademark Act of 1999</i> which was specifically requested).
             The chosen documents represent a range of government acts spanning over various time frames to demonstrate it's scalability. The model isn't trained on any other legal act but can be scalable to include any legal act required.</p>
         `;
-        instructionMsgDiv.innerHTML = `Sorry for the inconvenience but the chatbot is under repair, it will be up and running very soon : )`
+        // instructionMsgDiv.innerHTML = `Sorry for the inconvenience but the chatbot is under repair, it will be up and running very soon : )`
         chatBox.appendChild(instructionMsgDiv);
     }
 }
