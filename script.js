@@ -263,6 +263,7 @@ async function sendMessage() {
         userMessageDiv.classList.add('msg','message');
         userMessageDiv.textContent = userInput;
         chatBox.appendChild(userMessageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
         document.getElementById('user-input').value = '';
         const chatMessages = Array.from(chatBox.children).map(child => ({
             class: Array.from(child.classList).join(' '), // Join class names into a single string
