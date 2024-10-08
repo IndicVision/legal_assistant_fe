@@ -215,7 +215,7 @@ async function formatPage() {
             button.path = collection["path"];
             button.classList.add("collection-button");
             button.onclick = function() {
-                getCollection(button.path);
+                getCollection(button.path, content["name"]);
             };
             collectionsDiv.appendChild(button);
         }
@@ -225,8 +225,9 @@ async function formatPage() {
     })
 }
 
-async function getCollection(path) {
+async function getCollection(path, name) {
     console.log(path)
+    console.log(name)
     const loadingOverlay = document.getElementById('loading-overlay');
     loadingOverlay.style.display = 'flex';
     await fetch(url+"/format", {
@@ -236,6 +237,7 @@ async function getCollection(path) {
         },
         body: JSON.stringify({
             "path": path,
+            "name": name,
         })
     })
     .then(response => response.json())
