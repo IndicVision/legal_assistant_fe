@@ -1,4 +1,4 @@
-let url = "https://indiclegal-b59a3b62e57b.herokuapp.com/";
+let url = "https://indiclegal-b59a3b62e57b.herokuapp.com";
 
 const chatBox = document.getElementById('chat-box');
 window.onload = function() {
