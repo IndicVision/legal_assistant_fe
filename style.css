@@ -10,6 +10,19 @@ body {
     margin: 0; /* Remove default margin */
 }
 
+#login-form input {
+    background-color: black;
+    border: none;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+#login-form input:focus {
+    outline: none;
+}
+
 .menu-bar {
     background-color: #131313;
     padding: 20px;
