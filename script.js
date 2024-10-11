@@ -1,12 +1,40 @@
 let url = "https://indiclegal-b59a3b62e57b.herokuapp.com";
 
 const chatBox = document.getElementById('chat-box');
+const validUsername = "indicvision";
+const validPassword = "password123";
+
 window.onload = function() {
-    showPages('documentParser');
+    showLoginPage();
 };
-init()
+
 
 // Helper Functions
+
+function showLoginPage() {
+    document.getElementById('login-page').style.display = 'block';
+    const inputField = document.getElementById('password');
+    inputField.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            login();
+        }
+    })
+}
+
+function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const errorMsg = document.getElementById('login-error');
+    
+    if (username === validUsername && password === validPassword) {
+        document.getElementById('login-page').style.display = 'none';
+        document.getElementById('menu-bar').style.display = 'block';
+        showPages('documentParser');
+        init()
+    } else {
+        errorMsg.style.display = 'block'; 
+    }
+}
 
 function init() {
     checkAPIStatus();
