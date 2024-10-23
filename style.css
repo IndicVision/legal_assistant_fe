@@ -202,8 +202,8 @@ h1 {
     background: #444444;
   }
 #chatbot {
-    width: 80%;
-    height: 80%;
+    width: 95%;
+    height: 85%;
 }
 #chat-container {
     height: 100%;
@@ -213,17 +213,6 @@ h1 {
     border: 1px solid #000000;
     border-radius: 5px;
     padding: 20px;
-    ;
-}
-#chat-box {
-    width: 100%;
-    height: 100%;
-    /* height: 100%; */
-    overflow-y: auto;
-    border: 1px solid #00000000;
-    margin-bottom: 10px;
-    background-color: #242424;
-    border-radius: 5px;
 }
 .msg{
     margin: 10px;
@@ -231,9 +220,9 @@ h1 {
     color: white;
     border-radius: 10px;
     clear: both;
-    max-width: 70%;
 }
 .message {
+    max-width: 70%;
     background-color: #424242;
     float: right;
 }
