@@ -23,6 +23,28 @@ body {
     outline: none;
 }
 
+#login-form button {
+    margin-top: 5px;
+}
+
+#register-form input {
+    background-color: black;
+    border: none;
+    padding: 10px;
+    width: 90%;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+#register-form input:focus {
+    outline: none;
+}
+
+#register-form button {
+    margin-top: 5px;
+}
+
 .menu-bar {
     background-color: #131313;
     padding: 20px;
