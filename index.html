@@ -7,6 +7,17 @@
     <title>IndicVision Legal Tool</title>
 </head>
 <body>
+    <div class="register-page" id="register-page" style="display: none;">
+        <h2>Register</h2>
+        <form id="register-form">
+            <input type="text" id="register-username" placeholder="Username" required><br>
+            <input type="password" id="register-password" placeholder="Password" required><br>
+            <input type="password" id="confirm-password" placeholder="Confirm Password" required><br>
+            <button type="button" onclick="registerUser()">Register</button>
+        </form>
+        <p id="register-error" class="status-msg" style="color: red; display: none;"></p>
+        <p id="register-success" class="status-msg" style="color: green; display: none;"></p>
+    </div>
     <div class="login-page" id="login-page" style="display: none;">
         <h2>Login</h2>
         <form id="login-form">
@@ -14,7 +25,8 @@
             <input type="password" id="password" placeholder="Password" required><br>
             <button type="button" onclick="login()">Login</button>
         </form>
-        <p id="login-error" style="color: red; display: none;">Invalid username or password</p>
+        <p id="login-error" class="status-msg" style="color: red; display: none;">Invalid username or password</p>
+        <p id="login-success" class="status-msg" style="color: green; display: none;"></p>
     </div>
     <img id="logo" src="images/logo.png" >
     <div class="menu-bar" id="menu-bar" style="display: none;">
