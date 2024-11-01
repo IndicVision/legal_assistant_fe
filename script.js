@@ -21,18 +21,32 @@ function showLoginPage() {
     })
 }
 
-function login() {
+function showRegisterPage() {
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('register-page').style.display = 'block'; 
+}
+
+async function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const errorMsg = document.getElementById('login-error');
+    const successMsg = document.getElementById('login-success');
     
-    if (username === validUsername && password === validPassword) {
-        document.getElementById('login-page').style.display = 'none';
-        document.getElementById('menu-bar').style.display = 'block';
-        showPages('documentParser');
-        init()
+    loginAuthenticated = await authenticateLogin()
+
+    if (loginAuthenticated) {
+        errorMsg.style.display = 'none'; 
+        successMsg.style.display = 'block';
+        successMsg.textContent = "Login successful. Welcome, " + username + "!";
+        setTimeout(() => {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('menu-bar').style.display = 'block';
+            showPages('documentParser');
+            init()
+        }, 2000)
     } else {
         errorMsg.style.display = 'block'; 
+        errorMsg.textContent = 'Invalid username or password.';
     }
 }
 
@@ -203,6 +217,70 @@ function showInstructions() {
 }
 
 // API Calls
+
+async function authenticateLogin() {
+    let authenticated = null;
+    await fetch(url+"/login", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            authenticated = true;
+        } else {
+            authenticated = false;
+        }
+    })
+    return authenticated;
+}
+
+async function registerUser() {
+    const username = document.getElementById('register-username').value;
+    const password = document.getElementById('register-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const errorMsg = document.getElementById('register-error');
+    const successMsg = document.getElementById('register-success');
+
+    if (password === confirmPassword) {
+        errorMsg.style.display = "none";
+        await fetch(url+"/register", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username, 
+                password: password,
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                errorMsg.style.display = "none";
+                successMsg.style.display = "block";
+                successMsg.textContent = "Registration successful";
+                setTimeout(() => {
+                    successMsg.style.display = "none";
+                    document.getElementById('register-page').style.display = "none";
+                    showLoginPage();
+                }, 2000);
+            } else {
+                errorMsg.style.display = "block";
+                errorMsg.textContent = data.message;
+            }
+        })
+    } else {
+        errorMsg.style.display = "block";
+        errorMsg.textContent = "Passwords do not match";
+    }
+}
 
 async function checkAPIStatus(){
     let collectionsDiv = document.querySelector('.collections')
